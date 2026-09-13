@@ -1,0 +1,411 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="面向 2026 年 9 月 SILS 新生的选课经验、注册节点与工具工作台。"
+    />
+    <title>Chart Your Own Odyssey｜SILS 2026 选课工作台</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="data.js" defer></script>
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">跳到主要内容</a>
+
+    <header class="site-header" data-header>
+      <a class="brand" href="#home" aria-label="返回首页">
+        <span class="brand-mark">S</span>
+        <span>SILS 选课工作台</span>
+      </a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+        菜单
+      </button>
+      <nav class="site-nav" id="site-nav" aria-label="主要导航">
+        <a href="#principles">三条原则</a>
+        <a href="#requirements">毕业要求</a>
+        <a href="#picks">重点课程</a>
+        <a href="#courses">全部课程</a>
+        <a href="#before-register">注册前检查</a>
+        <a href="#registration">注册节点</a>
+        <a href="#resources">工具</a>
+      </nav>
+    </header>
+
+    <nav class="voyage-nav" aria-label="Odyssey 章节航线">
+      <span class="voyage-track" aria-hidden="true"><span class="voyage-progress"></span></span>
+      <a href="#home"><span>出发</span></a>
+      <a href="#principles"><span>三条原则</span></a>
+      <a href="#requirements"><span>毕业要求</span></a>
+      <a href="#picks"><span>重点课程</span></a>
+      <a href="#courses"><span>全部课程</span></a>
+      <a href="#before-register"><span>注册前检查</span></a>
+      <a href="#registration"><span>注册节点</span></a>
+      <a href="#resources"><span>工具</span></a>
+    </nav>
+    <div class="voyage-mobile-track" aria-hidden="true"><span class="voyage-progress"></span></div>
+
+    <main id="main">
+      <section class="hero shell" id="home" data-chapter="Departure">
+        <div class="hero-copy">
+          <p class="context-line">SILS 2026 秋季新生选课工作台</p>
+          <p class="odyssey-title">Chart Your Own Odyssey</p>
+          <h1>Welcome to SILS. Your Odyssey Starts Here.</h1>
+          <div class="audience-tags" aria-label="适合人群">
+            <span>2026 年 9 月入学</span>
+            <span>英语授课友好</span>
+            <span>日语仍在学习中</span>
+          </div>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#principles">开始浏览</a>
+            <a class="text-link" href="#courses">查看全部课程</a>
+          </div>
+        </div>
+
+        <aside class="action-panel" aria-labelledby="current-action-title">
+          <div class="action-heading">
+            <p id="current-action-title">现在最该做什么</p>
+            <span class="status-chip" data-action-status>准备中</span>
+          </div>
+          <p class="action-date" data-action-date>9 月 14 日 9:00 第一次注册开始</p>
+          <h2 data-action-title>先做一份“想选 + 备选”清单</h2>
+          <p data-action-copy>
+            先查课程说明和时间冲突，再用两位学长的真实体验判断课程负担。不要等注册窗口打开才开始找课。
+          </p>
+          <a class="panel-link" href="#registration">查看注册动作</a>
+        </aside>
+      </section>
+
+      <section class="presenters shell" aria-labelledby="presenters-title">
+        <div class="section-intro compact-intro">
+          <p class="context-line">分享者</p>
+          <h2 id="presenters-title">两个学期阶段，两种课程视角</h2>
+        </div>
+        <div class="presenter-grid">
+          <article class="presenter-card presenter-chambers">
+            <img
+              src="assets/chambers-portrait-web.jpg"
+              alt="Chambers 的照片"
+              width="360"
+              height="360"
+            />
+            <div>
+              <h3>Chambers 黄元畅</h3>
+              <p>SILS 四月入学一年生</p>
+              <p class="presenter-focus">商业、经济课程，小组合作与选课工具</p>
+            </div>
+          </article>
+          <article class="presenter-card presenter-richard">
+            <img
+              src="assets/richard-portrait-web.jpg"
+              alt="Richard 赖子睿的照片"
+              width="360"
+              height="360"
+            />
+            <div>
+              <h3>Richard 赖子睿</h3>
+              <p>SILS 九月入学二年生</p>
+              <p class="presenter-focus">人文历史方向，跨学科课程体验</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="principles section-pad" id="principles" data-chapter="North Stars">
+        <div class="shell">
+          <div class="section-intro">
+            <p class="context-line chapter-marker"><span aria-hidden="true">✦</span> North Stars<span class="chapter-caption">先建立判断，再开始搜课</span></p>
+            <h2>我们最想提前告诉你的三件事</h2>
+          </div>
+          <div class="principle-layout">
+            <article class="principle-primary">
+              <div class="principle-art-trio" aria-label="三条原则的三联插画">
+                <div class="principle-art principle-art-choice" role="img" aria-label="学生在多条课程路径前选择自己感兴趣的方向">
+                  <img src="assets/principles-triptych.jpg" alt="" loading="lazy" decoding="async" />
+                </div>
+                <div class="principle-art principle-art-japanese" role="img" aria-label="学生沿着由日语学习笔记组成的阶梯向上学习">
+                  <img src="assets/principles-triptych.jpg" alt="" loading="lazy" decoding="async" />
+                </div>
+                <div class="principle-art principle-art-outside" role="img" aria-label="三位学生在课堂之外交流并建立联系">
+                  <img src="assets/principles-triptych.jpg" alt="" loading="lazy" decoding="async" />
+                </div>
+              </div>
+              <div class="principle-copy">
+                <p class="principle-title">Follow Your Heart, Uni's a Journey</p>
+                <h3>第一学期，兴趣是很好的决策起点。</h3>
+                <p>
+                  选择真正感兴趣的内容，而不只是自己觉得“应该”学的课程。你还在适应新的城市、语言和学习方式，给自己一点余量，会让后面的投入更持续。
+                </p>
+                <button class="inline-action" type="button" data-course-jump="introduction-to-business-01">
+                  看一门“高投入但值得”的课
+                </button>
+              </div>
+            </article>
+            <div class="principle-side">
+              <article>
+                <div class="principle-copy">
+                  <p class="principle-title">Master Japanese ASAP</p>
+                  <h3>越早开始，复利周期越长。</h3>
+                  <p>日语会持续扩大你的课程、社交、实习和生活半径。重点不是冲等级，而是尽早建立稳定节奏。</p>
+                  <button class="inline-action" type="button" data-filter-preset="japanese">查看我们的日语课</button>
+                </div>
+              </article>
+              <article>
+                <div class="principle-copy">
+                  <p class="principle-title">The Actually Learning Happens Outside the Classroom</p>
+                  <h3>别把大学只过成一张课表。</h3>
+                  <ul class="outside-list" aria-label="课外学习入口">
+                    <li>ICC 社交活动</li>
+                    <li>社团</li>
+                    <li>实习 / 打工</li>
+                  </ul>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="requirements section-pad shell" id="requirements" data-chapter="Navigation Chart">
+        <div class="requirements-stamp" aria-label="毕业总学分 124">
+          <strong>124</strong>
+          <span>毕业总学分</span>
+        </div>
+        <div class="requirements-copy">
+          <div class="section-intro compact-intro">
+            <p class="context-line chapter-marker"><span aria-hidden="true">✦</span> Navigation Chart<span class="chapter-caption">SP2 官方要求摘要</span></p>
+            <h2>先守住毕业结构，再谈自由探索</h2>
+          </div>
+          <div class="credit-grid" aria-label="SP2 毕业学分构成">
+            <div><strong>31</strong><span>语言</span></div>
+            <div><strong>2</strong><span>统计</span></div>
+            <div><strong>2</strong><span>数据科学</span></div>
+            <div><strong>16</strong><span>研讨课</span></div>
+            <div><strong>40</strong><span>讲授课</span></div>
+            <div><strong>33</strong><span>选修课</span></div>
+          </div>
+          <div class="requirements-notes">
+            <p>Introductory Courses 至少覆盖 3 个 clusters。</p>
+            <p>2025 年及以后入学者必须修读 Introductory Data Science。</p>
+            <p>第一、第二学期标准注册上限为每学期 21 学分。</p>
+          </div>
+          <a
+            class="text-link"
+            href="https://www.waseda.jp/fire/sils/en/about/curriculum/"
+            target="_blank"
+            rel="noreferrer"
+          >查看 SILS 官方 Curriculum</a>
+          <p class="fine-print">此处按 SP2 摘要呈现。SP1 学生和特殊情况请以个人 Guidebook 与 SILS Office 说明为准。</p>
+        </div>
+      </section>
+
+      <section class="picks section-pad" id="picks" data-chapter="Captain’s Logs">
+        <div class="shell">
+          <div class="section-intro split-intro">
+            <div>
+              <p class="context-line chapter-marker"><span aria-hidden="true">✦</span> Captain’s Logs<span class="chapter-caption">五门重点课程</span></p>
+              <h2>红黑榜？不如聊聊 trade-offs</h2>
+            </div>
+          <p>现场只深讲这五门。点击课程即可展开真实课程负担、考核方式和适合人群。</p>
+          </div>
+          <div class="featured-list" data-featured-list></div>
+        </div>
+      </section>
+
+      <section class="course-explorer section-pad shell" id="courses" data-chapter="Explore the Ports">
+        <div class="section-intro split-intro">
+          <div>
+            <p class="context-line chapter-marker"><span aria-hidden="true">✦</span> Explore the Ports<span class="chapter-caption">课程浏览</span></p>
+            <h2>按你的需求，找一门更合适的课</h2>
+          </div>
+          <p>以下保留两位分享者的修课原话。评价来自特定学期，老师、考核和课堂安排可能变化，请核对当学期 Syllabus。小组标记沿用原表：N 没有、Y 有、YYY 很多；混合标记请分课程看。</p>
+        </div>
+
+        <div class="question-shortcuts" aria-label="常见问题快捷筛选">
+          <button type="button" data-filter-preset="lighter">想先轻松一点</button>
+          <button type="button" data-filter-preset="group">想做小组项目</button>
+          <button type="button" data-filter-preset="japanese">想认真学日语</button>
+          <button type="button" data-filter-preset="business">想看商业经济</button>
+          <button type="button" data-filter-preset="heavy">先看看高强度课</button>
+        </div>
+
+        <form class="filters" data-filter-form>
+          <label class="search-field">
+            <span>搜索课程</span>
+            <input type="search" name="query" placeholder="输入课程名、主题或体验关键词" autocomplete="off" />
+          </label>
+          <label>
+            <span>分享者</span>
+            <select name="takenBy">
+              <option value="all">全部</option>
+              <option value="Chambers">Chambers</option>
+              <option value="Richard">Richard</option>
+            </select>
+          </label>
+          <label>
+            <span>开课单位</span>
+            <select name="provider">
+              <option value="all">全部</option>
+              <option value="SILS">SILS</option>
+              <option value="CJL">CJL</option>
+            </select>
+          </label>
+          <label>
+            <span>语言</span>
+            <select name="language">
+              <option value="all">全部</option>
+              <option value="English">英语</option>
+              <option value="Japanese">日语</option>
+            </select>
+          </label>
+          <label>
+            <span>课程负担</span>
+            <select name="workload">
+              <option value="all">全部</option>
+              <option value="1-2">1 至 2</option>
+              <option value="3">3</option>
+              <option value="4-5">4 至 5</option>
+            </select>
+          </label>
+          <label>
+            <span>小组合作</span>
+            <select name="groupWork">
+              <option value="all">全部</option>
+              <option value="none">没有</option>
+              <option value="any">有或很多</option>
+              <option value="some">有</option>
+              <option value="heavy">很多</option>
+            </select>
+          </label>
+          <button class="reset-button" type="reset">清除筛选</button>
+        </form>
+
+        <div class="results-meta">
+          <p aria-live="polite" data-results-count></p>
+          <button class="density-toggle" type="button" data-density-toggle aria-pressed="false">切换紧凑视图</button>
+        </div>
+        <div class="course-grid" data-course-grid></div>
+        <div class="empty-state" data-empty-state hidden>
+          <h3>没有匹配的课程</h3>
+          <p>试试放宽课程负担范围，或清除一项筛选。</p>
+          <button class="button button-primary" type="button" data-reset-empty>清除筛选</button>
+        </div>
+      </section>
+
+      <section class="predeparture section-pad shell" id="before-register" data-chapter="Pre-departure Check">
+        <div class="section-intro">
+          <p class="context-line chapter-marker"><span aria-hidden="true">✦</span> Pre-departure Check</p>
+          <h2>Before You Register</h2>
+          <p>选课之前，给自己留 45 秒。不是再看一次课程介绍，而是看看这个组合适不适合你。</p>
+        </div>
+        <details class="departure-checks">
+          <summary><span>展开四项注册前检查</span><span class="check-summary-hint">负担 / 考核 / 日语 / 合作</span><span class="expand-mark" aria-hidden="true">+</span></summary>
+          <div class="check-grid">
+            <article>
+              <h3>Workload Check</h3>
+              <p class="check-question">这学期的组合是否过重？</p>
+              <p>把高负担课程放在一起看：最忙的一周，还剩多少时间给日语和课外生活？</p>
+              <button class="inline-action" type="button" data-filter-preset="heavy">对照高负担课程</button>
+            </article>
+            <article>
+              <h3>Assessment Check</h3>
+              <p class="check-question">考试、论文和 presentation 是否适合你？</p>
+              <p>看详情里的 Assessment，再用当学期 Syllabus 核对比例和 deadline。</p>
+              <button class="inline-action" type="button" data-assessment-search>搜索考核关键词</button>
+            </article>
+            <article>
+              <h3>Japanese Level Check</h3>
+              <p class="check-question">语言要求是否与实际水平匹配？</p>
+              <p>等级之外，也看看阅读、作业和课堂讨论的要求；学长体验不是分班建议。</p>
+              <button class="inline-action" type="button" data-filter-preset="japanese">对照日语课体验</button>
+            </article>
+            <article>
+              <h3>Teacher &amp; Teamwork Check</h3>
+              <p class="check-question">老师风格和小组合作是否符合预期？</p>
+              <p>对照 Group Work、适合谁与不适合谁；不要只看一句结论。</p>
+              <button class="inline-action" type="button" data-filter-preset="group">对照小组课程</button>
+            </article>
+          </div>
+          <p class="check-tools">再交叉查一遍：<a href="https://wasedatime.com/courses/syllabus" target="_blank" rel="noreferrer">WasedaTime</a> · <a href="https://www.wasedule.com/downloads" target="_blank" rel="noreferrer">わせジュール</a>。第三方评价仅供参考，最终回到官方 Syllabus。</p>
+        </details>
+      </section>
+
+      <section class="registration section-pad" id="registration" data-chapter="The Route">
+        <div class="shell">
+          <div class="section-intro split-intro">
+            <div>
+              <p class="context-line chapter-marker"><span aria-hidden="true">✦</span> The Route<span class="chapter-caption">2026 秋季，日本时间</span></p>
+              <h2>不要背日期，只记住下一步动作</h2>
+            </div>
+            <p>时间轴从第一次注册开始。临近操作时，仍请查看学校最新通知。</p>
+          </div>
+          <div class="registration-layout">
+            <article class="registration-current">
+              <p class="context-line">当前动作</p>
+              <span class="status-chip" data-timeline-status>准备中</span>
+              <h3 data-timeline-title>准备第一轮候选与备选</h3>
+              <p data-timeline-copy>把“最想选”和“没选上时怎么办”同时写好，注册时会从容很多。</p>
+            </article>
+            <ol class="timeline" data-timeline-list></ol>
+          </div>
+          <div class="registration-alerts">
+            <p><strong>系统维护：</strong>每日日本时间 2:00 至 7:00 无法使用 Web Course Registration。</p>
+            <p><strong>不要压线：</strong>学校通常不接受逾期注册。系统异常时应在截止前联系 SILS Office 并保留截图。</p>
+            <p><strong>退选限制：</strong>部分付费课程、Academic Writing 和特定开放课程可能不可退选，操作前先看官方说明。</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="resources section-pad shell" id="resources" data-chapter="Ship’s Toolkit">
+        <div class="section-intro split-intro">
+          <div>
+            <p class="context-line chapter-marker"><span aria-hidden="true">✦</span> Ship’s Toolkit<span class="chapter-caption">工具入口</span></p>
+            <h2>每个工具只解决一个清楚的问题</h2>
+          </div>
+          <p>第三方工具适合搜索和整理，最终选课、学分和规则仍以早稻田官方系统为准。</p>
+        </div>
+        <div class="resource-list" data-resource-list></div>
+      </section>
+
+      <section class="faq section-pad shell" id="faq">
+        <div class="section-intro compact-intro">
+          <p class="context-line">现场 Q&A</p>
+          <h2>可能会被问到的问题</h2>
+        </div>
+        <div class="faq-list">
+          <details>
+            <summary>第一学期选多少学分比较合适？</summary>
+            <p>先看毕业结构和 21 学分上限，再根据阅读、语言课和小组项目的组合判断。不要只看总学分，要看最忙的一周会同时发生什么。</p>
+          </details>
+          <details>
+            <summary>SGU 学生要不要优先学日语？</summary>
+            <p>建议尽早建立稳定节奏。日语不只影响课程，还影响社交、生活和实习选择。难度不必一步到顶，持续比短期冲刺重要。</p>
+          </details>
+          <details>
+            <summary>怎么理解你们说的“高性价比”？</summary>
+            <p>它不是单纯“容易拿分”。我们更看重投入是否换来清楚的知识、作品、表达训练或新的兴趣方向，以及这门课是否适合你。</p>
+          </details>
+          <details>
+            <summary>个人课程评价有多可靠？</summary>
+            <p>它适合帮助你提出问题，不适合替代课程说明。老师、考核和个人基础都会改变体验，所以卡片会同时写适合谁与不适合谁。</p>
+          </details>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="shell footer-grid">
+        <div>
+          <strong>SILS 选课工作台</strong>
+          <p>由 Chambers 与 Richard 的个人修课经验整理。</p>
+        </div>
+        <p>
+          课程与评价可能随学期和教师变化。最终请以 MyWaseda、官方课程说明和 SILS 最新通知为准。<br />
+          最后更新：2026-09-13
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>
