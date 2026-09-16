@@ -3,10 +3,24 @@
 
   document.documentElement.classList.add("sils-ready");
 
-  const data = window.SILS_DATA;
+  const locales = {
+    zh: { data: window.SILS_DATA, copy: window.SILS_COPY?.zh },
+    en: { data: window.SILS_DATA_EN, copy: window.SILS_COPY?.en }
+  };
+  const storedLocale = (() => {
+    try {
+      return window.localStorage.getItem("sils-language");
+    } catch (error) {
+      return null;
+    }
+  })();
+  let currentLocale = storedLocale === "en" ? "en" : "zh";
+  let data = locales[currentLocale].data;
+  let copy = locales[currentLocale].copy;
+  let compactView = false;
 
-  if (!data) {
-    document.body.innerHTML = "<p>课程数据加载失败。请确认 data.js 与 index.html 位于同一目录。</p>";
+  if (!data || !copy) {
+    document.body.innerHTML = "<p>Course data could not be loaded. Please check the page files.</p>";
     return;
   }
 
@@ -14,7 +28,8 @@
   const $$ = (selector, scope = document) => Array.from(scope.querySelectorAll(selector));
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   const scrollBehavior = () => reducedMotion.matches ? "auto" : "smooth";
-  const fieldText = (value) => escapeHtml(value || "原表暂未填写");
+  const t = (path) => path.split(".").reduce((value, key) => value?.[key], copy);
+  const fieldText = (value) => escapeHtml(value || t("labels.notProvided"));
 
   const escapeHtml = (value = "") =>
     String(value)
@@ -24,12 +39,11 @@
       .replaceAll('"', "&quot;")
       .replaceAll("'", "&#039;");
 
-  const languageLabel = {
-    English: "英语",
-    Japanese: "日语"
-  };
-
-  const termLabel = (term) => term.replaceAll("Spring", "春季").replaceAll("Fall", "秋季");
+  const languageLabel = (language) => t(`labels.language.${language}`) || language;
+  const termLabel = (term) => currentLocale === "en"
+    ? term
+    : term.replaceAll("Spring", "春季").replaceAll("Fall", "秋季");
+  const isTeacherMissing = (teacher) => teacher === "待补充" || teacher === "Not listed";
 
   function syllabusLinks(course) {
     const links = Array.isArray(course.syllabus)
@@ -41,7 +55,7 @@
     return links
       .map(
         (url, index) =>
-          `<a class="text-link" href="${escapeHtml(url)}" target="_blank" rel="noreferrer">查看官方 Syllabus${links.length > 1 ? ` ${index + 1}` : ""}</a>`
+          `<a class="text-link" href="${escapeHtml(url)}" target="_blank" rel="noreferrer">${escapeHtml(t("labels.syllabus"))}${links.length > 1 ? ` ${index + 1}` : ""}</a>`
       )
       .join("<span aria-hidden=\"true\"> · </span>");
   }
@@ -49,16 +63,16 @@
   function metaChips(course) {
     return [
       course.provider,
-      `${course.credits} 学分`,
+      `${course.credits} ${t("labels.credits")}`,
       termLabel(course.term),
-      languageLabel[course.language] || course.language,
-      course.teacher === "待补充" ? "教师待补充" : course.teacher
+      languageLabel(course.language),
+      isTeacherMissing(course.teacher) ? t("labels.teacherMissing") : course.teacher
     ]
       .map((item) => `<span class="meta-chip">${escapeHtml(item)}</span>`)
       .join("");
   }
 
-  function renderFeatured() {
+  function renderFeatured(openIds = []) {
     const container = $("[data-featured-list]");
     const featuredOrder = [
       "introduction-to-business-01",
@@ -76,7 +90,7 @@
         (course, index) => `
           <details class="featured-course" name="captains-logs" data-featured-id="${escapeHtml(course.id)}" ${index === 0 ? "open" : ""}>
             <summary>
-              <span class="featured-owner"><small class="log-index">LOG ${String(index + 1).padStart(2, "0")}</small>${escapeHtml(course.takenBy)}</span>
+              <span class="featured-owner"><small class="log-index">${escapeHtml(t("labels.log"))} ${String(index + 1).padStart(2, "0")}</small>${escapeHtml(course.takenBy)}</span>
               <span class="featured-title">${escapeHtml(course.title)}</span>
               <span class="featured-verdict">${escapeHtml(course.verdict)}</span>
               <span class="expand-mark" aria-hidden="true">+</span>
@@ -84,26 +98,26 @@
             <div class="featured-body">
               <div class="feature-facts">
                 ${metaChips(course)}
-                <span class="meta-chip">课程负担 ${course.workload}/5</span>
-                <span class="meta-chip">Group Work: ${escapeHtml(course.groupLabel)}</span>
+                <span class="meta-chip">${escapeHtml(t("labels.workload"))} ${course.workload}/5</span>
+                <span class="meta-chip">${escapeHtml(t("labels.groupWork"))}: ${escapeHtml(course.groupLabel)}</span>
               </div>
               <div class="feature-story">
-                <p class="log-attribution">${escapeHtml(course.takenBy)} 的修课原话</p>
+                <p class="log-attribution">${escapeHtml(course.takenBy)}${escapeHtml(t("labels.attributionSuffix"))}</p>
                 <p class="source-copy">${escapeHtml(course.experience)}</p>
                 <div class="detail-pairs">
                   <div>
-                    <strong>适合谁</strong>
+                    <strong>${escapeHtml(t("labels.fit"))}</strong>
                     <p>${escapeHtml(course.fit)}</p>
                   </div>
                   <div>
-                    <strong>不适合谁</strong>
+                    <strong>${escapeHtml(t("labels.avoid"))}</strong>
                     <p>${escapeHtml(course.avoid)}</p>
                   </div>
                   <div>
-                    <strong>Assessment</strong>
+                    <strong>${escapeHtml(t("labels.assessment"))}</strong>
                     <p>${escapeHtml(course.assessment)}</p>
                   </div>
-                  ${course.syllabus ? `<div><strong>官方资料</strong><p>${syllabusLinks(course)}</p></div>` : ""}
+                  ${course.syllabus ? `<div><strong>${escapeHtml(t("labels.officialInfo"))}</strong><p>${syllabusLinks(course)}</p></div>` : ""}
                 </div>
               </div>
             </div>
@@ -120,13 +134,40 @@
         });
       });
     });
+    openIds.forEach((id) => {
+      const details = $$(".featured-course", container).find((item) => item.dataset.featuredId === id);
+      if (details) details.open = true;
+    });
   }
 
   const filterForm = $("[data-filter-form]");
   const courseGrid = $("[data-course-grid]");
   const resultsCount = $("[data-results-count]");
   const emptyState = $("[data-empty-state]");
+  const selectedReviewByCourse = new Map();
   let applyingPreset = false;
+
+  const reviewerName = (course) => course.reviewer || course.takenBy || t("labels.notProvided");
+  const courseIdentity = (course) => course.courseKey || course.id;
+  const courseDisplayTitle = (course) => course.groupTitle || course.title;
+
+  function groupCourses(courses) {
+    const groups = new Map();
+    courses.forEach((course) => {
+      const key = courseIdentity(course);
+      if (!groups.has(key)) {
+        groups.set(key, {
+          key,
+          title: courseDisplayTitle(course),
+          reviews: []
+        });
+      }
+      const group = groups.get(key);
+      if (course.groupTitle) group.title = course.groupTitle;
+      group.reviews.push(course);
+    });
+    return Array.from(groups.values());
+  }
 
   function getFilters() {
     const formData = new FormData(filterForm);
@@ -135,10 +176,11 @@
 
   function courseMatches(course, filters) {
     const searchable = [
+      courseDisplayTitle(course),
       course.title,
       course.provider,
       course.language,
-      course.takenBy,
+      reviewerName(course),
       course.teacher,
       course.experience,
       course.fit,
@@ -150,7 +192,7 @@
       .toLocaleLowerCase();
 
     const queryMatches = !filters.query || searchable.includes(filters.query.trim().toLocaleLowerCase());
-    const ownerMatches = filters.takenBy === "all" || course.takenBy === filters.takenBy;
+    const ownerMatches = filters.takenBy === "all" || reviewerName(course) === filters.takenBy;
     const providerMatches = filters.provider === "all" || course.provider === filters.provider;
     const languageMatches = filters.language === "all" || course.language === filters.language;
 
@@ -168,68 +210,172 @@
     return queryMatches && ownerMatches && providerMatches && languageMatches && workloadMatches && groupMatches;
   }
 
-  function courseCard(course) {
+  function reviewerTabs(group, selectedReview) {
+    if (group.reviews.length < 2) {
+      return `<div class="reviewer-single"><span>${escapeHtml(t("explorer.reviewer.single"))}</span><strong>${escapeHtml(reviewerName(selectedReview))}</strong></div>`;
+    }
+
+    const hasCindy = group.reviews.some((review) => reviewerName(review) === "Cindy");
+    return `
+      <div class="reviewer-switch">
+        <div class="reviewer-switch-copy">
+          <span class="reviewer-switch-label"><span class="reviewer-star" aria-hidden="true">✦</span>${escapeHtml(t("explorer.reviewer.label"))}</span>
+          <span class="reviewer-switch-hint">${escapeHtml(hasCindy ? t("explorer.reviewer.cindyHint") : t("explorer.reviewer.hint"))}</span>
+        </div>
+        <div class="reviewer-tabs" role="tablist" aria-label="${escapeHtml(t("explorer.reviewer.aria"))}">
+          ${group.reviews.map((review) => {
+            const reviewer = reviewerName(review);
+            const isSelected = review.id === selectedReview.id;
+            const isCindy = reviewer === "Cindy";
+            return `
+              <button
+                class="reviewer-tab${isCindy ? " reviewer-tab-cindy" : ""}"
+                type="button"
+                role="tab"
+                aria-selected="${String(isSelected)}"
+                aria-controls="review-panel-${escapeHtml(group.key)}"
+                data-reviewer-tab
+                data-review-id="${escapeHtml(review.id)}"
+                data-course-key="${escapeHtml(group.key)}"
+              >
+                ${isCindy ? `<span class="reviewer-tab-star" aria-hidden="true">✦</span>` : ""}
+                <span>${escapeHtml(reviewer)}</span>
+                ${isCindy ? `<small>${escapeHtml(t("explorer.reviewer.new"))}</small>` : ""}
+              </button>
+            `;
+          }).join("")}
+        </div>
+      </div>
+    `;
+  }
+
+  function reviewPanel(course) {
     const source = course.source
-      ? `<dt>补充资料</dt><dd><a class="text-link" href="${escapeHtml(course.source)}" target="_blank" rel="noreferrer">查看课程产出</a></dd>`
+      ? `<dt>${escapeHtml(t("labels.source"))}</dt><dd><a class="text-link" href="${escapeHtml(course.source)}" target="_blank" rel="noreferrer">${escapeHtml(t("labels.sourceLink"))}</a></dd>`
       : "";
     const syllabus = course.syllabus
-      ? `<dt>官方 Syllabus</dt><dd>${syllabusLinks(course)}</dd>`
+      ? `<dt>${escapeHtml(t("labels.syllabus"))}</dt><dd>${syllabusLinks(course)}</dd>`
       : "";
 
     return `
-      <article class="course-card" data-course-id="${escapeHtml(course.id)}" data-expanded="false">
+      <div class="course-review-panel" id="review-panel-${escapeHtml(courseIdentity(course))}" role="tabpanel" data-review-panel data-review-id="${escapeHtml(course.id)}">
         <div class="course-head">
           <div>
-            <h3 class="course-title">${escapeHtml(course.title)}</h3>
             <div class="course-meta">
-              <span class="meta-chip">${escapeHtml(course.takenBy)}</span>
+              <span class="meta-chip">${escapeHtml(reviewerName(course))}</span>
               <span class="meta-chip">${escapeHtml(course.provider)}</span>
-              <span class="meta-chip">${escapeHtml(languageLabel[course.language] || course.language)}</span>
-              <span class="meta-chip">小组：${escapeHtml(course.groupLabel)}</span>
+              <span class="meta-chip">${escapeHtml(languageLabel(course.language))}</span>
+              <span class="meta-chip">${escapeHtml(t("labels.group"))}: ${escapeHtml(course.groupLabel)}</span>
             </div>
           </div>
-          <span class="workload" aria-label="课程负担 ${course.workload}，满分 5">负担 ${course.workload}</span>
+          <span class="workload" aria-label="${escapeHtml(t("labels.workload"))} ${course.workload} out of 5">${escapeHtml(t("labels.workload"))} ${course.workload}</span>
         </div>
         <p class="course-take">${escapeHtml(course.experience)}</p>
-        <button class="course-toggle" type="button" aria-expanded="false" aria-controls="detail-${escapeHtml(course.id)}">查看完整体验</button>
+        <button class="course-toggle" type="button" aria-expanded="false" aria-controls="detail-${escapeHtml(course.id)}">${escapeHtml(t("courseDetails.expand"))}</button>
         <div class="course-details" id="detail-${escapeHtml(course.id)}" aria-hidden="true" inert>
           <div>
             <div class="course-detail-inner">
               <dl>
-                <dt>学分</dt><dd>${course.credits}</dd>
-                <dt>修读学期</dt><dd>${escapeHtml(termLabel(course.term))}</dd>
-                <dt>授课老师</dt><dd>${escapeHtml(course.teacher)}</dd>
-                <dt>适合谁</dt><dd>${fieldText(course.fit)}</dd>
-                <dt>不适合谁</dt><dd>${fieldText(course.avoid)}</dd>
-                <dt>Assessment</dt><dd>${fieldText(course.assessment)}</dd>
+                <dt>${escapeHtml(t("labels.credits"))}</dt><dd>${course.credits}</dd>
+                <dt>${escapeHtml(t("labels.term"))}</dt><dd>${escapeHtml(termLabel(course.term))}</dd>
+                <dt>${escapeHtml(t("labels.teacher"))}</dt><dd>${escapeHtml(course.teacher)}</dd>
+                <dt>${escapeHtml(t("labels.fit"))}</dt><dd>${fieldText(course.fit)}</dd>
+                <dt>${escapeHtml(t("labels.avoid"))}</dt><dd>${fieldText(course.avoid)}</dd>
+                <dt>${escapeHtml(t("labels.assessment"))}</dt><dd>${fieldText(course.assessment)}</dd>
                 ${syllabus}
                 ${source}
-                ${course.notes ? `<dt>原表 Notes</dt><dd>${escapeHtml(course.notes)}</dd>` : ""}
+                ${course.notes ? `<dt>${escapeHtml(t("labels.notes"))}</dt><dd>${escapeHtml(course.notes)}</dd>` : ""}
               </dl>
             </div>
           </div>
         </div>
+      </div>
+    `;
+  }
+
+  function courseCard(group) {
+    const savedReviewId = selectedReviewByCourse.get(group.key);
+    const selectedReview = group.reviews.find((review) => review.id === savedReviewId) || group.reviews[0];
+
+    return `
+      <article class="course-card" data-course-key="${escapeHtml(group.key)}" data-expanded="false">
+        <div class="course-heading">
+          <h3 class="course-title">${escapeHtml(group.title)}</h3>
+          ${reviewerTabs(group, selectedReview)}
+        </div>
+        ${reviewPanel(selectedReview)}
       </article>
     `;
   }
 
-  function renderCourses() {
+  function setCourseExpanded(card, expanded) {
+    card.dataset.expanded = String(expanded);
+    const button = $(".course-toggle", card);
+    const details = $(".course-details", card);
+    button.setAttribute("aria-expanded", String(expanded));
+    button.textContent = expanded ? t("courseDetails.collapse") : t("courseDetails.expand");
+    details.setAttribute("aria-hidden", String(!expanded));
+    details.inert = !expanded;
+  }
+
+  function bindCourseToggle(card) {
+    $(".course-toggle", card)?.addEventListener("click", () => {
+      const expanded = card.dataset.expanded === "true";
+      setCourseExpanded(card, !expanded);
+    });
+  }
+
+  function bindReviewerTabs(card, groupsByKey) {
+    $$(`[data-reviewer-tab]`, card).forEach((button) => {
+      button.addEventListener("click", () => {
+        const group = groupsByKey.get(button.dataset.courseKey);
+        const review = group?.reviews.find((item) => item.id === button.dataset.reviewId);
+        if (!group || !review) return;
+
+        selectedReviewByCourse.set(group.key, review.id);
+        const expanded = card.dataset.expanded === "true";
+        const panel = $("[data-review-panel]", card);
+        if (!panel) return;
+        panel.outerHTML = reviewPanel(review);
+        $$("[data-reviewer-tab]", card).forEach((tab) => {
+          tab.setAttribute("aria-selected", String(tab.dataset.reviewId === review.id));
+        });
+        bindCourseToggle(card);
+        if (expanded) setCourseExpanded(card, true);
+      });
+    });
+  }
+
+  function bindCourseCard(card, groupsByKey) {
+    bindCourseToggle(card);
+    bindReviewerTabs(card, groupsByKey);
+  }
+
+  function updateDensityButton() {
+    const button = $("[data-density-toggle]");
+    if (!button) return;
+    button.textContent = compactView ? t("explorer.density.compact") : t("explorer.density.full");
+  }
+
+  function renderCourses(expandedIds = []) {
     const filters = getFilters();
     const filtered = data.courses.filter((course) => courseMatches(course, filters));
-    courseGrid.innerHTML = filtered.map(courseCard).join("");
-    resultsCount.textContent = `找到 ${filtered.length} 门课程，共 ${data.courses.length} 门`;
-    emptyState.hidden = filtered.length !== 0;
+    const grouped = groupCourses(filtered);
+    const totalGroups = groupCourses(data.courses).length;
+    const groupsByKey = new Map(grouped.map((group) => [group.key, group]));
+    courseGrid.innerHTML = grouped.map(courseCard).join("");
+    courseGrid.classList.toggle("compact", compactView);
+    resultsCount.textContent = t("explorer.results")
+      .replace("{filtered}", grouped.length)
+      .replace("{total}", totalGroups);
+    emptyState.hidden = grouped.length !== 0;
+    updateDensityButton();
 
-    $$(".course-toggle", courseGrid).forEach((button) => {
-      button.addEventListener("click", () => {
-        const card = button.closest(".course-card");
-        const expanded = card.dataset.expanded === "true";
-        card.dataset.expanded = String(!expanded);
-        button.setAttribute("aria-expanded", String(!expanded));
-        button.textContent = expanded ? "查看完整体验" : "收起体验";
-        $(".course-details", card).setAttribute("aria-hidden", String(expanded));
-        $(".course-details", card).inert = expanded;
-      });
+    $$(".course-card", courseGrid).forEach((card) => bindCourseCard(card, groupsByKey));
+
+    expandedIds.forEach((id) => {
+      const card = $$(".course-card", courseGrid).find((item) => item.dataset.courseKey === id);
+      if (card) setCourseExpanded(card, true);
     });
   }
 
@@ -282,7 +428,7 @@
 
   $("[data-assessment-search]").addEventListener("click", () => {
     applyPreset("assessment");
-    $("[name='query']", filterForm).placeholder = "试试 presentation、essay、exam 或 paper";
+    $("[name='query']", filterForm).placeholder = t("explorer.filters.assessmentPlaceholder");
   });
 
   $("[data-reset-empty]").addEventListener("click", () => {
@@ -294,9 +440,10 @@
   });
 
   $("[data-density-toggle]").addEventListener("click", (event) => {
-    const compact = courseGrid.classList.toggle("compact");
-    event.currentTarget.setAttribute("aria-pressed", String(compact));
-    event.currentTarget.textContent = compact ? "切换完整视图" : "切换紧凑视图";
+    compactView = !compactView;
+    courseGrid.classList.toggle("compact", compactView);
+    event.currentTarget.setAttribute("aria-pressed", String(compactView));
+    updateDensityButton();
   });
 
   $$("[data-course-jump]").forEach((button) => {
@@ -322,7 +469,7 @@
     const current = data.registration.find((item) => timelineState(item, now) === "current");
     if (current) {
       return {
-        status: "正在进行",
+        status: t("timeline.current"),
         state: "current",
         date: current.dateLabel.replace("\n", " "),
         title: current.title,
@@ -334,22 +481,22 @@
     if (next) {
       const isBeforeFirst = next.id === data.registration[0].id;
       return {
-        status: isBeforeFirst ? "准备中" : "下一步",
+        status: isBeforeFirst ? t("timeline.preparing") : t("timeline.next"),
         state: "upcoming",
         date: next.dateLabel.replace("\n", " "),
-        title: isBeforeFirst ? "先做一份“想选 + 备选”清单" : next.title,
+        title: isBeforeFirst ? t("timeline.beforeFirstTitle") : next.title,
         copy: isBeforeFirst
-          ? "先查课程说明和时间冲突，再用两位学长的真实体验判断课程负担。不要等注册窗口打开才开始找课。"
+          ? t("timeline.beforeFirstCopy")
           : next.action
       };
     }
 
     return {
-      status: "已完成",
+      status: t("timeline.completed"),
       state: "completed",
-      date: "2026 秋季注册阶段已结束",
-      title: "确认课表，开始管理每周节奏",
-      copy: "把课程 deadline 放进日历，并在学期初再次核对课程说明和课堂通知。"
+      date: t("timeline.completedDate"),
+      title: t("timeline.completedTitle"),
+      copy: t("timeline.completedCopy")
     };
   }
 
@@ -403,7 +550,7 @@
             <strong class="resource-name">${escapeHtml(resource.name)}</strong>
             <p class="resource-copy">${escapeHtml(resource.copy)}</p>
             <a class="resource-link" href="${escapeHtml(resource.url)}" target="_blank" rel="noreferrer">
-              打开
+              ${escapeHtml(t("resources.open"))}
             </a>
           </article>
         `
@@ -411,10 +558,45 @@
       .join("");
   }
 
+  function captureOpenIds(selector, attribute) {
+    return $$(selector)
+      .map((element) => element.getAttribute(attribute))
+      .filter(Boolean);
+  }
+
+  function setLocale(locale) {
+    if (!locales[locale] || !locales[locale].data || !locales[locale].copy) return;
+
+    const scrollY = window.scrollY;
+    const openFeaturedIds = captureOpenIds("[data-featured-list] .featured-course[open]", "data-featured-id");
+    const expandedCourseIds = captureOpenIds("[data-course-grid] .course-card[data-expanded='true']", "data-course-key");
+
+    currentLocale = locale;
+    data = locales[locale].data;
+    copy = locales[locale].copy;
+    try {
+      window.localStorage.setItem("sils-language", locale);
+    } catch (error) {
+      // Private browsing and blocked storage should not prevent the toggle from working.
+    }
+
+    window.SILS_LOCALIZE_STATIC(locale);
+    renderFeatured(openFeaturedIds);
+    renderCourses(expandedCourseIds);
+    renderTimeline();
+    renderResources();
+    window.requestAnimationFrame(() => window.scrollTo({ top: scrollY, behavior: "auto" }));
+  }
+
   function setupNavigation() {
     const menuButton = $(".menu-toggle");
     const nav = $("#site-nav");
     const navLinks = $$("a", nav);
+    const languageButton = $("[data-language-toggle]");
+
+    languageButton?.addEventListener("click", () => {
+      setLocale(currentLocale === "en" ? "zh" : "en");
+    });
 
     menuButton.addEventListener("click", () => {
       const open = nav.dataset.open === "true";
@@ -507,6 +689,7 @@
     schedule(true);
   }
 
+  window.SILS_LOCALIZE_STATIC(currentLocale);
   renderFeatured();
   renderCourses();
   renderTimeline();
