@@ -409,6 +409,17 @@
     $("#courses").scrollIntoView({ behavior: scrollBehavior(), block: "start" });
   }
 
+  function applyReviewerFilter(reviewer, trigger) {
+    applyingPreset = true;
+    filterForm.reset();
+    applyingPreset = false;
+    filterForm.elements.takenBy.value = reviewer;
+    resetPresetButtons();
+    trigger?.setAttribute("aria-pressed", "true");
+    renderCourses();
+    $("#courses").scrollIntoView({ behavior: scrollBehavior(), block: "start" });
+  }
+
   filterForm.addEventListener("input", () => {
     resetPresetButtons();
     renderCourses();
@@ -424,6 +435,10 @@
 
   $$("[data-filter-preset]").forEach((button) => {
     button.addEventListener("click", () => applyPreset(button.dataset.filterPreset, button));
+  });
+
+  $$("[data-presenter-filter]").forEach((button) => {
+    button.addEventListener("click", () => applyReviewerFilter(button.dataset.presenterFilter, button));
   });
 
   $("[data-assessment-search]").addEventListener("click", () => {
@@ -558,6 +573,83 @@
       .join("");
   }
 
+  function setupPresenterCards() {
+    // Keep keyboard/reading order consistent with the visible layout at each breakpoint.
+    const grid = $(".presenter-grid");
+    const smallScreen = window.matchMedia("(max-width: 820px)");
+    const arrange = () => {
+      const author = $(".presenter-chambers", grid);
+      const richard = $(".presenter-richard", grid);
+      if (smallScreen.matches) grid.insertBefore(author, richard);
+      else grid.insertBefore(richard, author);
+    };
+    arrange();
+    smallScreen.addEventListener?.("change", arrange);
+    const cards = $$("[data-reveal]");
+    if (!cards.length) return;
+
+    const reveal = (card) => card.setAttribute("data-reveal", "visible");
+    if (reducedMotion.matches || !("IntersectionObserver" in window)) {
+      cards.forEach(reveal);
+      return;
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        reveal(entry.target);
+        observer.unobserve(entry.target);
+      });
+    }, { threshold: 0.15, rootMargin: "0px 0px -8% 0px" });
+
+    cards.forEach((card) => observer.observe(card));
+  }
+
+  function setupInlineWechatCopy() {
+    const buttons = $$("[data-copy-wechat-inline]");
+    if (!buttons.length) return;
+
+    const copyText = async (value) => {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(value);
+        return true;
+      }
+
+      const fallback = document.createElement("textarea");
+      fallback.value = value;
+      fallback.setAttribute("readonly", "");
+      fallback.style.position = "fixed";
+      fallback.style.opacity = "0";
+      document.body.append(fallback);
+      fallback.select();
+      const copied = document.execCommand("copy");
+      fallback.remove();
+      return copied;
+    };
+
+    buttons.forEach((button) => {
+      let copyResetTimer = 0;
+      button.addEventListener("click", async () => {
+        const id = button.dataset.wechatId || "";
+        const label = $("[data-copy-label]", button);
+        if (!id || !label) return;
+        window.clearTimeout(copyResetTimer);
+        try {
+          const copied = await copyText(id);
+          label.textContent = copied ? t("contact.copied") : t("contact.copyFailed");
+          button.dataset.copyState = copied ? "copied" : "failed";
+        } catch (error) {
+          label.textContent = t("contact.copyFailed");
+          button.dataset.copyState = "failed";
+        }
+        copyResetTimer = window.setTimeout(() => {
+          label.textContent = t("contact.copy");
+          delete button.dataset.copyState;
+        }, 1800);
+      });
+    });
+  }
+
   function captureOpenIds(selector, attribute) {
     return $$(selector)
       .map((element) => element.getAttribute(attribute))
@@ -630,7 +722,7 @@
 
     function paintMotion() {
       const documentHeight = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
-      const routeProgress = reducedMotionQuery.matches ? 1 : clamp(window.scrollY / documentHeight);
+      const routeProgress = clamp(window.scrollY / documentHeight);
       document.documentElement.style.setProperty("--route-progress", routeProgress.toFixed(4));
       progressBars.forEach((bar) => bar.style.setProperty("--route-progress", routeProgress.toFixed(4)));
 
@@ -653,6 +745,11 @@
       const position = window.scrollY + Math.min(window.innerHeight * 0.3, 200);
       let active = 0;
       offsets.forEach((top, index) => { if (position >= top) active = index; });
+      document.documentElement.style.setProperty("--chapter-progress", String(active / Math.max(1, sections.length - 1)));
+      routeLinks.forEach(link => {
+        const index = sections.findIndex(section => link.hash === "#" + section.id);
+        link.toggleAttribute("data-passed", index >= 0 && index < active);
+      });
       allLinks.forEach(link => {
         if (link.hash === "#" + sections[active].id) link.setAttribute("aria-current", "location");
         else link.removeAttribute("aria-current");
@@ -694,5 +791,7 @@
   renderCourses();
   renderTimeline();
   renderResources();
+  setupPresenterCards();
+  setupInlineWechatCopy();
   setupNavigation();
 })();

@@ -9,6 +9,7 @@
     />
     <title>Chart Your Own Odyssey｜SILS 2026 选课工作台</title>
     <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="odyssey-atlas.css" />
     <script src="data.js" defer></script>
     <script src="data-en.js" defer></script>
     <script src="locale.js" defer></script>
@@ -44,6 +45,7 @@
     <nav class="voyage-nav" aria-label="Odyssey 章节航线" data-i18n-attr="aria-label:accessibility.voyageNav">
       <span class="voyage-track" aria-hidden="true"><span class="voyage-progress"></span></span>
       <a href="#home"><span data-i18n="voyage.home">出发</span></a>
+      <a href="#guides"><span data-i18n="presenters.context">分享者</span></a>
       <a href="#principles"><span data-i18n="voyage.principles">三条原则</span></a>
       <a href="#requirements"><span data-i18n="voyage.requirements">毕业要求</span></a>
       <a href="#picks"><span data-i18n="voyage.picks">重点课程</span></a>
@@ -85,38 +87,132 @@
         </aside>
       </section>
 
-      <section class="presenters shell" aria-labelledby="presenters-title">
+      <section class="presenters shell" id="guides" data-chapter="Guides" aria-labelledby="presenters-title">
         <div class="section-intro compact-intro">
           <p class="context-line" data-i18n="presenters.context">分享者</p>
-          <h2 id="presenters-title" data-i18n="presenters.title">两个学期阶段，两种课程视角</h2>
+          <h2 id="presenters-title" data-i18n="presenters.title">不同路径，不同课程视角</h2>
+          <p class="presenter-intro" data-i18n="presenters.intro">每一张卡片都从课程视角和个人入口出发：先看关注点，再打开相关课程日志，或通过社媒联系分享者。</p>
         </div>
         <div class="presenter-grid">
-          <article class="presenter-card presenter-chambers">
-            <img
-              src="assets/chambers-portrait-web.jpg"
-              alt="Chambers 的照片"
-              data-i18n-attr="alt:presenters.chambersAlt"
-              width="360"
-              height="360"
-            />
-            <div>
-              <h3 data-i18n="presenters.chambersName">Chambers 黄元畅</h3>
-              <p data-i18n="presenters.chambersRole">SILS 四月入学一年生</p>
-              <p class="presenter-focus" data-i18n="presenters.chambersFocus">商业、经济课程，小组合作与选课工具</p>
+          <article class="presenter-card presenter-richard" data-reveal="pending">
+            <div class="presenter-portrait-frame">
+              <img
+                src="assets/richard-portrait-web.jpg"
+                alt="Richard 的照片"
+                data-i18n-attr="alt:presenters.richardAlt"
+                width="360"
+                height="360"
+              />
+              <span class="portrait-route" aria-hidden="true">02</span>
+            </div>
+            <div class="presenter-content">
+              <div class="presenter-meta">
+                <span class="presenter-badge" data-i18n="presenters.contributorBadge">课程分享者</span>
+                <span class="presenter-route-label">FIELD NOTES</span>
+              </div>
+              <h3 data-i18n="presenters.richardName">Richard</h3>
+              <p class="presenter-role" data-i18n="presenters.richardRole">SILS 25Fall</p>
+              <p class="presenter-focus" data-i18n="presenters.richardFocus">人文历史方向，跨学科课程体验</p>
+              <div class="presenter-tags" aria-label="Richard 关注的课程主题" data-i18n-attr="aria-label:presenters.richardTagsAria">
+                <span data-i18n="presenters.richardTags.0">人文 / 历史</span>
+                <span data-i18n="presenters.richardTags.1">跨学科</span>
+                <span data-i18n="presenters.richardTags.2">课堂体验</span>
+              </div>
+              <div class="presenter-contacts" aria-label="Richard 的联系方式" data-i18n-attr="aria-label:contact.richardAria">
+                <button class="contact-link contact-wechat" type="button" data-copy-wechat-inline data-wechat-id="KatsuragiZakura" aria-label="复制 Richard 的微信号" data-i18n-attr="aria-label:contact.richardWechatAria">
+                  <span class="contact-icon" aria-hidden="true">W</span>
+                  <span class="contact-link-copy"><strong data-copy-label data-i18n="contact.copy" aria-live="polite">复制微信号</strong><small>KatsuragiZakura</small></span>
+                </button>
+                <a class="contact-link" href="https://www.instagram.com/katsuragizakura/" target="_blank" rel="noreferrer" aria-label="Instagram: katsuragizakura">
+                  <span class="contact-icon" aria-hidden="true">◎</span>
+                  <span class="contact-link-copy"><strong>Instagram</strong><small>katsuragizakura</small></span>
+                </a>
+              </div>
+              <button class="presenter-action" type="button" data-presenter-filter="Richard">
+                <span data-i18n="presenters.viewLogs">查看课程日志</span><span aria-hidden="true">↗</span>
+              </button>
             </div>
           </article>
-          <article class="presenter-card presenter-richard">
-            <img
-              src="assets/richard-portrait-web.jpg"
-              alt="Richard 赖子睿的照片"
-              data-i18n-attr="alt:presenters.richardAlt"
-              width="360"
-              height="360"
-            />
-            <div>
-              <h3 data-i18n="presenters.richardName">Richard 赖子睿</h3>
-              <p data-i18n="presenters.richardRole">SILS 九月入学二年生</p>
-              <p class="presenter-focus" data-i18n="presenters.richardFocus">人文历史方向，跨学科课程体验</p>
+          <article class="presenter-card presenter-chambers presenter-author" data-reveal="pending">
+            <div class="presenter-portrait-frame">
+              <img
+                src="assets/chambers-portrait-web.jpg"
+                alt="Chambers 的照片"
+                data-i18n-attr="alt:presenters.chambersAlt"
+                width="360"
+                height="360"
+              />
+              <span class="portrait-route" aria-hidden="true">01</span>
+            </div>
+            <div class="presenter-content">
+              <div class="presenter-meta">
+                <span class="presenter-badge presenter-badge-author" data-i18n="presenters.authorBadge">网站作者</span>
+                <span class="presenter-route-label">NORTH STAR</span>
+              </div>
+              <h3 data-i18n="presenters.chambersName">Chambers</h3>
+              <p class="presenter-role" data-i18n="presenters.chambersRole">SILS 26Spring</p>
+              <p class="presenter-focus" data-i18n="presenters.chambersFocus">商业、经济课程，小组合作与选课工具</p>
+              <div class="presenter-tags" aria-label="Chambers 关注的课程主题" data-i18n-attr="aria-label:presenters.chambersTagsAria">
+                <span data-i18n="presenters.chambersTags.0">商业 / 经济</span>
+                <span data-i18n="presenters.chambersTags.1">小组合作</span>
+                <span data-i18n="presenters.chambersTags.2">选课工具</span>
+              </div>
+              <div class="presenter-contacts" aria-label="Chambers 的联系方式" data-i18n-attr="aria-label:contact.chambersAria">
+                <button class="contact-link contact-wechat" type="button" data-copy-wechat-inline data-wechat-id="Chambers0603" aria-label="复制 Chambers 的微信号" data-i18n-attr="aria-label:contact.chambersWechatAria">
+                  <span class="contact-icon" aria-hidden="true">W</span>
+                  <span class="contact-link-copy"><strong data-copy-label data-i18n="contact.copy" aria-live="polite">复制微信号</strong><small>Chambers0603</small></span>
+                </button>
+                <a class="contact-link" href="https://www.instagram.com/chambers_s_s/" target="_blank" rel="noreferrer" aria-label="Instagram: chambers_s_s">
+                  <span class="contact-icon" aria-hidden="true">◎</span>
+                  <span class="contact-link-copy"><strong>Instagram</strong><small>chambers_s_s</small></span>
+                </a>
+                <a class="contact-link" href="https://www.xiaohongshu.com/search_result?keyword=Chambers%E5%9C%A8%E4%B8%9C%E4%BA%AC" target="_blank" rel="noreferrer" aria-label="Chambers 的小红书主页" data-i18n-attr="aria-label:contact.chambersXhsAria">
+                  <span class="contact-icon" aria-hidden="true">X</span>
+                  <span class="contact-link-copy"><strong data-i18n="contact.xiaohongshu">小红书</strong><small data-i18n="contact.chambersXhs">Chambers在东京</small></span>
+                </a>
+              </div>
+              <button class="presenter-action" type="button" data-presenter-filter="Chambers">
+                <span data-i18n="presenters.viewLogs">查看课程日志</span><span aria-hidden="true">↗</span>
+              </button>
+            </div>
+          </article>
+          <article class="presenter-card presenter-cindy" data-reveal="pending">
+            <div class="presenter-portrait-frame">
+              <img
+                src="assets/cindy-portrait-web.png"
+                alt="Cindy 的照片"
+                data-i18n-attr="alt:presenters.authorAlt"
+                width="1456"
+                height="1080"
+              />
+              <span class="portrait-route" aria-hidden="true">03</span>
+            </div>
+            <div class="presenter-content">
+              <div class="presenter-meta">
+                <span class="presenter-badge" data-i18n="presenters.contributorBadge">课程分享者</span>
+                <span class="presenter-route-label">ON DECK</span>
+              </div>
+              <h3 data-i18n="presenters.authorName">Cindy</h3>
+              <p class="presenter-role" data-i18n="presenters.authorRole">SILS 26Spring</p>
+              <p class="presenter-focus" data-i18n="presenters.authorFocus">商科、国际关系课程；人际交往、环境适应能力</p>
+              <div class="presenter-tags" aria-label="Cindy 的工作方向" data-i18n-attr="aria-label:presenters.authorTagsAria">
+                <span data-i18n="presenters.authorTags.0">商科 / 国际关系</span>
+                <span data-i18n="presenters.authorTags.1">人际交往</span>
+                <span data-i18n="presenters.authorTags.2">环境适应</span>
+              </div>
+              <div class="presenter-contacts" aria-label="Cindy 的联系方式" data-i18n-attr="aria-label:contact.cindyAria">
+                <button class="contact-link contact-wechat" type="button" data-copy-wechat-inline data-wechat-id="im_Cccccindyyyyy" aria-label="复制 Cindy 的微信号" data-i18n-attr="aria-label:contact.cindyWechatAria">
+                  <span class="contact-icon" aria-hidden="true">W</span>
+                  <span class="contact-link-copy"><strong data-copy-label data-i18n="contact.copy" aria-live="polite">复制微信号</strong><small>im_Cccccindyyyyy</small></span>
+                </button>
+                <a class="contact-link" href="https://www.instagram.com/im_ccccindyyyyyyy/" target="_blank" rel="noreferrer" aria-label="Instagram: im_ccccindyyyyyyy">
+                  <span class="contact-icon" aria-hidden="true">◎</span>
+                  <span class="contact-link-copy"><strong>Instagram</strong><small>im_ccccindyyyyyyy</small></span>
+                </a>
+              </div>
+              <button class="presenter-action" type="button" data-presenter-filter="Cindy">
+                <span data-i18n="presenters.viewLogs">查看课程日志</span><span aria-hidden="true">↗</span>
+              </button>
             </div>
           </article>
         </div>
