@@ -1,5 +1,5 @@
 window.SILS_DATA_EN = {
-  lastUpdated: "2026-09-16",
+  lastUpdated: "2026-09-17",
   courses: [
     {
       id: "academic-writing-w315sp",
@@ -10,7 +10,7 @@ window.SILS_DATA_EN = {
       language: "English",
       workload: 3,
       takenBy: "Chambers",
-      teacher: "MUEHLEISEN, Victoria L. others",
+      teacher: "multiple",
       experience: "Top-tier; the experience depends on how much you want to put into it. Even if you want to keep the workload light and avoid a lot of extra reading, you can still earn a decent grade.",
       fit: "Required; placement is based on your entrance English exam.",
       avoid: "",
@@ -31,7 +31,7 @@ window.SILS_DATA_EN = {
       language: "Japanese",
       workload: 5,
       takenBy: "Chambers",
-      teacher: "Not listed",
+      teacher: "Classes are assigned randomly; each class has a different instructor.",
       experience: "Top-tier, but the workload is genuinely heavy and some assignments may feel pointless. If you read the texts seriously and actively participate in discussions and presentations, you can learn a lot. A useful rule of thumb: taking the level immediately below the one assigned by your Waseda placement test may make the class smoother and make a 5.0 GPA more realistic.",
       fit: "Students who are ready for the challenge.",
       avoid: "Students who want to take Japanese slowly and avoid a heavy Japanese-language workload.",
@@ -173,7 +173,7 @@ window.SILS_DATA_EN = {
       language: "Japanese",
       workload: 1,
       takenBy: "Richard",
-      teacher: "Not listed",
+      teacher: "Classes are assigned randomly; each class has a different instructor.",
       experience: "Top-tier. This is a standard small-group Japanese class that is good for reinforcing the basics and practicing speaking. Class levels vary, and some students coast, but that also gives you room to improve if you want to. It is an on-demand online course, so you can take it from home while having breakfast.",
       fit: "Students with weak or shaky Japanese foundations, including students who want a low-workload way to earn the credits.",
       avoid: "Students who already have a strong foundation and want to push their Japanese further.",
@@ -191,7 +191,7 @@ window.SILS_DATA_EN = {
       language: "Japanese",
       workload: 2,
       takenBy: "Richard",
-      teacher: "Not listed",
+      teacher: "UTSUNOMIYA, Youko",
       experience: "Top-tier. The workload is manageable, the class gives you useful Japanese speaking practice, and there are no obvious downsides.",
       fit: "Broadly the same as Nihongo 1(2)D: students who want manageable practice with everyday Japanese.",
       avoid: "Broadly the same as Nihongo 1(2)D: students looking for a much more advanced or intensive challenge.",
